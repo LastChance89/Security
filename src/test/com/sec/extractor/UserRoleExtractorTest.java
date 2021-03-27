@@ -20,8 +20,7 @@ public class UserRoleExtractorTest {
 		Mockito.when(rs.getString("ROLE")).thenReturn("testRole");
 		UserRoleExtractor userRoleE = new UserRoleExtractor(); 
 		SimpleGrantedAuthority testRole = new SimpleGrantedAuthority("testRole");
-		List<SimpleGrantedAuthority> role = new ArrayList<SimpleGrantedAuthority>(); 
-		role = userRoleE.extractData(rs);
+		List<SimpleGrantedAuthority> role = userRoleE.extractData(rs);
 		assertEquals(role.get(0),testRole);
 		
 	}

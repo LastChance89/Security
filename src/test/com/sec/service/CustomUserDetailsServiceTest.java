@@ -20,10 +20,12 @@ import com.sec.service.impl.CustomUserDetailsServiceImpl;
 public class CustomUserDetailsServiceTest {
 
 	@Mock
-	private SecurityService service;// = new SecurityServiceImpl();
+	private SecurityService service;
 
 	@InjectMocks 
 	private CustomUserDetailsServiceImpl customUdService;
+	
+	private final String testUserName = "testUser";
 	
 	@Test
 	public void loadUserByUsernameTest() {
@@ -34,9 +36,9 @@ public class CustomUserDetailsServiceTest {
 				add(new SimpleGrantedAuthority("testRole2"));
 			}
 		};
-		User testUser = new User("testUser", "", userRoles);
-		Mockito.when(service.getRoles("testUser")).thenReturn(userRoles);
-		assertEquals(customUdService.loadUserByUsername("testUser"), testUser);
+		User testUser = new User(testUserName, "", userRoles);
+		Mockito.when(service.getRoles(testUserName)).thenReturn(userRoles);
+		assertEquals(customUdService.loadUserByUsername(testUserName), testUser);
 	}
 
 }

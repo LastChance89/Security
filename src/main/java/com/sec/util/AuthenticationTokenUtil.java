@@ -27,6 +27,8 @@ public class AuthenticationTokenUtil  implements Serializable{
 		
 	private String secret = "Secret_Key"; 
 	
+	private final String tokenRolesIdentifire = "roles";
+	
 	public String getUserNameFromToken(String token) {
 		return  getAllClaimsFromToken(token).getSubject();
 	}
@@ -39,7 +41,7 @@ public class AuthenticationTokenUtil  implements Serializable{
 	@SuppressWarnings("unchecked")
 	public List<SimpleGrantedAuthority> getRoles(String token) {
 		List<SimpleGrantedAuthority> roleList = new ArrayList<SimpleGrantedAuthority>();	
-		ArrayList<Object> roles =  (ArrayList<Object>) getAllClaimsFromToken(token).get("roles");
+		ArrayList<Object> roles =  (ArrayList<Object>) getAllClaimsFromToken(token).get(tokenRolesIdentifire);
 		for(Object role: roles) {
 			/*
 			 * This is done because for some reason the roles are coming in as {authority=userRole}. 
@@ -68,7 +70,7 @@ public class AuthenticationTokenUtil  implements Serializable{
 	}
 	
 	public String createToken(User user) {
-		return Jwts.builder().setClaims(new HashMap<String,Object>(){{put("roles",user.getRoles());}})
+		return Jwts.builder().setClaims(new HashMap<String,Object>(){{put(tokenRolesIdentifire,user.getRoles());}})
 				.setSubject(user.getUserName()).setIssuedAt(new Date(System.currentTimeMillis())) //start
 				.setExpiration(new Date(System.currentTimeMillis() +900000)) //expire in 15 min
 				.signWith(SignatureAlgorithm.HS512, secret) //Hash
@@ -76,7 +78,7 @@ public class AuthenticationTokenUtil  implements Serializable{
 	}
 	
 	public String createToken(String userName, List<SimpleGrantedAuthority> roleList) {
-		return Jwts.builder().setClaims(new HashMap<String,Object>(){{put("roles",roleList);}})
+		return Jwts.builder().setClaims(new HashMap<String,Object>(){{put(tokenRolesIdentifire,roleList);}})
 				.setSubject(userName).setIssuedAt(new Date(System.currentTimeMillis())) //start
 				.setExpiration(new Date(System.currentTimeMillis() +900000)) //expire
 				.signWith(SignatureAlgorithm.HS512, secret) //Hash

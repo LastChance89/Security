@@ -42,17 +42,15 @@ public class UserDaoImpl implements UserDao{
 
 	@Override
 	public Boolean checkUserNameExists(String userName) {
-		// TODO Auto-generated method stub
 		return jdbcTemplate.query(userQuery, new Object[] {userName}, new UserResultSetExtractor());
 	}
 
 	@Override
 	public Boolean createNewUser(User user) {
-	
 		try {
-			Session session = sessionFactory.openSession();
-			Transaction transaction = session.beginTransaction();
-			session.save(user);
+			Session currentSession = sessionFactory.getCurrentSession();
+			Transaction transaction = currentSession.beginTransaction();
+			currentSession.save(user);
 			transaction.commit();
 			return true;
 		}
@@ -61,6 +59,7 @@ public class UserDaoImpl implements UserDao{
 			logger.error("ERROR: " , e);
 			return false;
 		}
+
 	}
 
 

@@ -29,10 +29,6 @@ public class AuthenticationTokenUtilTest {
 		authenticationTokenUtil = new AuthenticationTokenUtil();
 	}
 
-	@After
-	public void tearDown() throws Exception {
-	}
-
 	@Test
 	public void createTokenAndVerifyTest() {
 		User user = new User("TestUser","Password","hint",roles);
